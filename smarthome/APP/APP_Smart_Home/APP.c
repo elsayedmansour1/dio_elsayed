@@ -52,7 +52,7 @@ void project(void)
 
 	LCD_Commands(0X80);
 	CLCD_voidWriteNumber(10);
-	uint8 temp ;
+	uint16 temp ;
 	while(1)
 	{
 
@@ -63,13 +63,14 @@ void project(void)
 		ADC_Select_Channal(1);
 		ADC_Start_Conversion();
 		ADC_Get_Result(&temp);
+		temp=temp/2;
 		LCD_Commands(0X80);
 		LCD_Write_String("Brightness = ");
 		//CLCD_voidWriteNumber(ADC_readChannel(0));
 
 		LCD_Commands(0Xc0);
 		LCD_Write_String("Temprechar = ");
-		CLCD_voidWriteNumber(temp/2);
+		CLCD_voidWriteNumber(temp);
 
 
 		/*if( (LDR_Range(ADC_readChannel(0))) == LOW)// LDR SENSOR
@@ -91,16 +92,16 @@ void project(void)
 
 
 
-		if(temp > 30 )
+		if(temp > 35 )
 		{
 			DC_ON_OFF(ON);
 		}
-		if(temp > (30)+5 )
+		if(temp > 45)
 		{
 			DC_ON_OFF(ON);
 			BUZZER_ON_OFF(ON);
 		}
-		if (temp < 30)
+		if (temp < 35)
 		{
 			DC_ON_OFF(OFF);
 		}
@@ -252,7 +253,7 @@ int keybad_System(void)
 					LCD_Write_String("Your Input Is Wrong");
 				}
 			}
-			if(Sum==9999)
+			if(Sum==7777)
 			{
 				Sevro_Degre(0);
 				_delay_ms(500);
@@ -269,7 +270,7 @@ int keybad_System(void)
 				LCD_Write_String("Right pass ......");
 				Lcd_Clear();
 			}
-			else if(Sum!=9999)
+			else if(Sum!=7777)
 			{
 				Counter++;
 				SpetialSeven7(Counter);

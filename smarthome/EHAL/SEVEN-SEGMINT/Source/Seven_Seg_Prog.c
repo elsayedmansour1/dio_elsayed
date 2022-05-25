@@ -19,7 +19,7 @@
 /****************************************************************************************************************/
 /*************************************CONTENER HAVE VALUE WILL SHOW IN SEVEN SGMENT******************************/
 /****************************************************************************************************************/
-const uint8 array[10]={ Zero , One , Two , Three , Four , Five , Six , Seven , Eight , Nine };
+const uint8 array[10]={};
 
 
 
@@ -286,13 +286,13 @@ void SpetialSeven7(uint8 number)
 		DIO_VoidSetPinDir(PORTC,PIN_7,OUTPUT);
 
 
-		DIO_VoidSetPinValue(PORTD,PIN_0,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_3,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_4,INPUT);
+		DIO_VoidSetPinValue(PORTD,PIN_0,OUTPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_3,OUTPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_4,OUTPUT);
 		DIO_VoidSetPinValue(PORTC,PIN_2,OUTPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_5,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_6,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_7,INPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_5,OUTPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_6,OUTPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_7,OUTPUT);
 
 	}
 	if(number==1)
@@ -314,19 +314,23 @@ void SpetialSeven7(uint8 number)
 	else if (number==2)
 	{
 		DIO_VoidSetPinDir(PORTC,PIN_2,OUTPUT);
-		DIO_VoidSetPinDir(PORTC,PIN_4,OUTPUT);
+		DIO_VoidSetPinDir(PORTC,PIN_3,OUTPUT);
+		//DIO_VoidSetPinDir(PORTC,PIN_4,OUTPUT);
 		DIO_VoidSetPinDir(PORTC,PIN_5,OUTPUT);
 		DIO_VoidSetPinDir(PORTC,PIN_6,OUTPUT);
 		DIO_VoidSetPinDir(PORTC,PIN_7,OUTPUT);
+		DIO_VoidSetPinDir(PORTD,PIN_0,OUTPUT);
 
-		DIO_VoidSetPinValue(PORTD,PIN_0,OUTPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_3,OUTPUT);
+
+
 
 		DIO_VoidSetPinValue(PORTC,PIN_2,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_4,INPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_3,INPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_4,OUTPUT);
 		DIO_VoidSetPinValue(PORTC,PIN_5,INPUT);
-		DIO_VoidSetPinValue(PORTC,PIN_6,INPUT);
+		DIO_VoidSetPinValue(PORTC,PIN_6,OUTPUT);
 		DIO_VoidSetPinValue(PORTC,PIN_7,INPUT);
+		DIO_VoidSetPinValue(PORTD,PIN_0,INPUT);
 	}
 	else if (number==3)
 	{
