@@ -30,9 +30,17 @@
 #include "../../MCAL/EXT_INTERRUPTS/include/INTERRUPTS_interface.h"
 
 #include "APP.h"
-
-int keybad_System(void);
+void project(void);
+void keybad_System(void);
+uint16 FunctionCountM (uint8 Count);
+void LDR_System(uint16 ADC_Value);
+void TEMP_Sytem(uint16 TEMP_Value);
+uint8 Right_PASS(void);
+uint8 Wrong_PASS(void);
 uint8 TOKEYBAD =0 ;
+static uint8 Counter = 0 ;
+uint16 temp=0;
+uint16 LDR_Value=0;
 void project(void)
 {
 
@@ -52,61 +60,39 @@ void project(void)
 
 	LCD_Commands(0X80);
 	CLCD_voidWriteNumber(10);
-	uint16 temp ;
+
 	while(1)
 	{
 
-		BUZZER_ON_OFF(ON);
+
 		/**
 		 * @braif keybad
 		 */
+		/*ADC Channal 1 for temperature sensor*/
 		ADC_Select_Channal(1);
 		ADC_Start_Conversion();
 		ADC_Get_Result(&temp);
 		temp=temp/2;
+		_delay_ms(100);
+		/*ADC Channal 0 for LDR sensor*/
+		//ADC_Select_Channal(0);
+		//ADC_Start_Conversion();
+		//ADC_Get_Result(&LDR_Value);
+
+		/*TO Display the LDR value on lCD*/
 		LCD_Commands(0X80);
 		LCD_Write_String("Brightness = ");
-		//CLCD_voidWriteNumber(ADC_readChannel(0));
-
+		//CLCD_voidWriteNumber(LDR_Value);
+		/*TO Display the Temperature value on lCD*/
 		LCD_Commands(0Xc0);
 		LCD_Write_String("Temprechar = ");
 		CLCD_voidWriteNumber(temp);
 
+		 /*this function to handle some cases if temperature is so high or normal*/
+		TEMP_Sytem(temp);
+		/*this function to handle some cases if Brightness is so high or so dark*/
+		//LDR_System(LDR_Value);
 
-		/*if( (LDR_Range(ADC_readChannel(0))) == LOW)// LDR SENSOR
-		{
-			LED_VoidOffLed(LED_ONEA2);
-			LED_VoidOffLed(LED_TWOA3);
-		}
-		else if((LDR_Range(ADC_readChannel(0))) == HIGH)
-		{
-			LED_VoidOnLed(LED_ONEA2);
-			LED_VoidOffLed(LED_TWOA3);
-		}
-		else if((LDR_Range(ADC_readChannel(0))) == HIGHHIGH)
-		{
-			LED_VoidOnLed(LED_ONEA2);
-			LED_VoidOnLed(LED_TWOA3);
-		}*/
-
-
-
-
-		if(temp > 35 )
-		{
-			DC_ON_OFF(ON);
-		}
-		if(temp > 45)
-		{
-			DC_ON_OFF(ON);
-			BUZZER_ON_OFF(ON);
-		}
-		if (temp < 35)
-		{
-			DC_ON_OFF(OFF);
-		}
-
-		//ADC_DataReturnA1 = ADC_readChannel(1); //TEMP SENSOR
 	}
 
 }
@@ -117,22 +103,27 @@ void __vector_1(void)
 {
 	Lcd_Clear();
 	keybad_System();
+	Lcd_Clear();
+	BUZZER_ON_OFF(OFF);
+	_delay_ms(200);
 }
 
 
 
 
-int keybad_System(void)
+void keybad_System(void)
 {
 	LCD_Init();
 	LED_VoidInit();
 	DC_Init();
 	Servo_Init();
+	BUZZER_Init();
 
+	SpetialSeven7(0);
 	while(1)
 	{
 		uint8 Flag1=0 ;
-		static Counter = 0 ;
+
 		LCD_Commands(0X80);
 		LCD_Write_String("Enter your PASS");
 
@@ -143,7 +134,8 @@ int keybad_System(void)
 		PASS = KEYBAD_ReturnData();
 		_delay_ms(250);
 
-		CLCD_voidWriteNumber(PASS);
+		//CLCD_voidWriteNumber(PASS);
+		LCD_Write_String("*");
 
 
 		if(PASS==61)
@@ -156,7 +148,8 @@ int keybad_System(void)
 			{
 				PASS = KEYBAD_ReturnData() ;
 				_delay_ms(250);
-				CLCD_voidWriteNumber(PASS);
+				//CLCD_voidWriteNumber(PASS);
+				LCD_Write_String("*");
 				if(PASS>=0 && PASS<=9)
 				{
 					Sum = Sum*10 + PASS;
@@ -238,82 +231,142 @@ int keybad_System(void)
 		{
 			LCD_Commands(0XC1);
 			Sum = PASS;
-			for(uint8 i=0 ; i<3 ; i++)
+			Function_EntryNumber(&Sum,&PASS);
+			if(Sum==9999)
 			{
-				PASS = KEYBAD_ReturnData() ;
-				_delay_ms(250);
-				CLCD_voidWriteNumber(PASS);
-				if(PASS>=0 && PASS<=9)
+				if( Right_PASS()==0 )
 				{
-					Sum = Sum*10 + PASS;
-				}
-				else
-				{
-					LCD_Commands(0X80);
-					LCD_Write_String("Your Input Is Wrong");
-				}
-			}
-			if(Sum==7777)
-			{
-				Sevro_Degre(0);
-				_delay_ms(500);
-				Sevro_Degre(90);
-				_delay_ms(500);
-				Sevro_Degre(0);
-				Counter=0;
-
-				Lcd_Clear();
-				LCD_Commands(0X80);
-				LCD_Write_String("Right pass ......");
-				_delay_ms(500);
-				LCD_Commands(0XC0);
-				LCD_Write_String("Right pass ......");
-				Lcd_Clear();
-			}
-			else if(Sum!=7777)
-			{
-				Counter++;
-				SpetialSeven7(Counter);
-				LCD_Commands(0X80);
-				LCD_Write_String("Wrong PASS ");
-				LCD_Commands(0XC0);
-				LCD_Write_String("TRY AGAIN ");
-
-				_delay_ms(700);
-
-				Lcd_Clear();
-
-				LCD_Commands(0X80);
-				LCD_Write_String("Enter your PASS");
-
-			}
-
-			if(Counter==0 || Counter==3)
-			{
-				if(Counter==3)
-				{
-					SpetialSeven7(0);
-					Lcd_Clear();
-					LCD_Commands(0X80);
-					LCD_Commands(0XC0);
-					LCD_Write_String("TRY LATER....... ");
-
-					BUZZER_ON_OFF(ON);
-
-					_delay_ms(700);
-
-					Lcd_Clear();
-
-					LCD_Commands(0X80);
-					LCD_Write_String("Enter your PASS");
 					break;
-
 				}
+			}
+			else if(Sum!=9999)
+			{
+				Wrong_PASS();
+			}
+
+			if(FunctionCountM(Counter)==0)
+			{
+				break;
 			}
 		}
 	}
-
-
-
 }
+uint16 FunctionCountM(uint8 Count)
+{
+	uint8 INDEX ;
+	if(Counter==0 || Counter==3)
+	{
+		if(Counter==3)
+		{
+			BUZZER_ON_OFF(ON);
+			SpetialSeven7(0);
+			Lcd_Clear();
+			LCD_Commands(0X80);
+			LCD_Commands(0XC0);
+			LCD_Write_String("TRY LATER....... ");
+
+			BUZZER_ON_OFF(ON);
+
+			_delay_ms(1000);
+
+			Lcd_Clear();
+			BUZZER_ON_OFF(OFF);
+
+			INDEX = 0 ;
+		}
+	}
+	return INDEX ;
+}
+
+void TEMP_Sytem(uint16 TEMP_Value)
+{
+	if(TEMP_Value > 35 )
+	{
+		DC_ON_OFF(ON);
+		BUZZER_ON_OFF(OFF);
+	}
+	if(TEMP_Value > 45 )
+	{
+		DC_ON_OFF(ON);
+		BUZZER_ON_OFF(ON);
+	}
+	if (TEMP_Value < 35)
+	{
+		DC_ON_OFF(OFF);
+		BUZZER_ON_OFF(OFF);
+	}
+}
+void LDR_System(uint16 ADC_Value)
+{
+	if(ADC_Value == LOW)// LDR SENSOR
+	{
+		LED_VoidOffLed(LED_ONEA2);
+		LED_VoidOffLed(LED_TWOA3);
+	}
+	else if(ADC_Value == HIGH)
+	{
+		LED_VoidOnLed(LED_ONEA2);
+		LED_VoidOffLed(LED_TWOA3);
+	}
+	else if(ADC_Value == HIGHHIGH)
+	{
+		LED_VoidOnLed(LED_ONEA2);
+		LED_VoidOnLed(LED_TWOA3);
+	}
+}
+uint8 Right_PASS(void)
+{
+	Sevro_Degre(0);
+	_delay_ms(500);
+	Sevro_Degre(90);
+	_delay_ms(500);
+	Sevro_Degre(0);
+	Counter=0;
+
+	Lcd_Clear();
+	LCD_Commands(0X80);
+	LCD_Write_String("Right pass ......");
+	_delay_ms(500);
+	LCD_Commands(0XC0);
+	LCD_Write_String("Right pass ......");
+	Lcd_Clear();
+	return 0 ;
+}
+uint8 Wrong_PASS(void)
+{
+	Counter++;
+	SpetialSeven7(Counter);
+	LCD_Commands(0X80);
+	LCD_Write_String("Wrong PASS ");
+	LCD_Commands(0XC0);
+	LCD_Write_String("TRY AGAIN ");
+
+	_delay_ms(700);
+
+	Lcd_Clear();
+
+	LCD_Commands(0X80);
+	LCD_Write_String("Enter your PASS");
+	return 0 ;
+}
+void Function_EntryNumber(uint16 *SUM, uint16 *PASS)
+{
+	for(uint8 i=0 ; i<3 ; i++)
+	{
+		*PASS = KEYBAD_ReturnData() ;
+		_delay_ms(250);
+		//CLCD_voidWriteNumber(PASS);
+		LCD_Write_String("*");
+		if(*PASS>=0 && *PASS<=9)
+		{
+			*SUM = (*SUM)*10 + *PASS;
+		}
+		else
+		{
+			LCD_Commands(0X80);
+			LCD_Write_String("Your Input Is Wrong");
+		}
+	}
+}
+
 

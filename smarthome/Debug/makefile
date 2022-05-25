@@ -10,7 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include RUN_MAIN/subdir.mk
 -include MCAL/WATCH_DOG/subdir.mk
--include MCAL/TIMER1/Source/subdir.mk
+-include MCAL/TIMER1/subdir.mk
 -include MCAL/I2C/src/subdir.mk
 -include MCAL/GIE/Source/subdir.mk
 -include MCAL/EXT_INTERRUPTS/src/subdir.mk

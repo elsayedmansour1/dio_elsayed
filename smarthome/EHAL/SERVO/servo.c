@@ -13,7 +13,7 @@
 #include "../../MCAL/DIO/Header/Dio_Private.h"
 #include "../../MCAL/DIO/Header/Dio_Config.h"
 
-#include "../../MCAL/TIMER1/Header/Timer1_Interface.h"
+#include "../../MCAL/TIMER1/TIMER_Interface.h"
 
 void Servo_Init(void)
 {
@@ -23,15 +23,15 @@ void Sevro_Degre(uint8 Position)
 {
 	if(Position==0)
 	{
-		Timer1_Fast_PWM_Init(124);	/* Set Servo shaft at 0° position by 1 ms pulse */
+		Set_Duty_Cycle_TIMER_1_A(3);	/* Set Servo shaft at 0° position by 1 ms pulse */
 	}
 	else if(Position==90)
 	{
-		Timer1_Fast_PWM_Init(187);	/* Set Servo shaft at 90° position by 1.5 ms pulse */
+		Set_Duty_Cycle_TIMER_1_A(7.5);	/* Set Servo shaft at 90° position by 1.5 ms pulse */
 	}
 	else if(Position==180)
 	{
-		Timer1_Fast_PWM_Init(250);	/* Set Servo shaft at 180° position by 2 ms pulse */
+		Set_Duty_Cycle_TIMER_1_A(12.5);	/* Set Servo shaft at 180° position by 2 ms pulse */
 	}
 }
 
