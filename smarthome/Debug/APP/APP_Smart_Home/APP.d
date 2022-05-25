@@ -24,8 +24,7 @@ APP/APP_Smart_Home/APP.o APP/APP_Smart_Home/APP.o:  \
   ../APP/APP_Smart_Home/../../EHAL/LED/Header/Led_Interface.h \
   ../APP/APP_Smart_Home/../../EHAL/LED/Header/../../../SERVICE/Std_Types.h \
   ../APP/APP_Smart_Home/../../EHAL/LED/Header/Led_Private.h \
-  ../APP/APP_Smart_Home/../../MCAL/ADC_G/adc.h \
-  ../APP/APP_Smart_Home/../../MCAL/ADC_G/../../SERVICE/Std_Types.h \
+  ../APP/APP_Smart_Home/../../MCAL/ADC/ADC_INT.h \
   ../APP/APP_Smart_Home/../../MCAL/WATCH_DOG/WDT_interface.h \
   ../APP/APP_Smart_Home/../../SERVICE/Std_Types.h \
   ../APP/APP_Smart_Home/../../MCAL/GIE/Header/GIE_Interface.h \
@@ -84,9 +83,7 @@ APP/APP_Smart_Home/APP.o APP/APP_Smart_Home/APP.o:  \
 
 ../APP/APP_Smart_Home/../../EHAL/LED/Header/Led_Private.h:
 
-../APP/APP_Smart_Home/../../MCAL/ADC_G/adc.h:
-
-../APP/APP_Smart_Home/../../MCAL/ADC_G/../../SERVICE/Std_Types.h:
+../APP/APP_Smart_Home/../../MCAL/ADC/ADC_INT.h:
 
 ../APP/APP_Smart_Home/../../MCAL/WATCH_DOG/WDT_interface.h:
 

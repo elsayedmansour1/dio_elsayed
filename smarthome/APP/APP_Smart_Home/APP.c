@@ -20,7 +20,7 @@
 #include "../../EHAL/LED/Header/Led_Private.h"
 
 
-#include "../../MCAL/ADC_G/adc.h"
+#include "../../MCAL/ADC/ADC_INT.h"
 #include "../../MCAL/WATCH_DOG/WDT_interface.h"
 
 
@@ -38,7 +38,8 @@ void project(void)
 
 	LCD_Init();
 	LED_VoidInit();
-	ADC_init();
+	ADC_VidINIT();
+
 	DC_Init();
 	BUZZER_Init();
 	GIE_VoidEnable();
@@ -59,16 +60,19 @@ void project(void)
 		/**
 		 * @braif keybad
 		 */
+		ADC_Select_Channal(1);
+		ADC_Start_Conversion();
+		ADC_Get_Result(&temp);
 		LCD_Commands(0X80);
 		LCD_Write_String("Brightness = ");
-		CLCD_voidWriteNumber(ADC_readChannel(0));
+		//CLCD_voidWriteNumber(ADC_readChannel(0));
 
 		LCD_Commands(0Xc0);
 		LCD_Write_String("Temprechar = ");
-		CLCD_voidWriteNumber(ADC_readChannel(1)/2);
+		CLCD_voidWriteNumber(temp/2);
 
 
-		if( (LDR_Range(ADC_readChannel(0))) == LOW)// LDR SENSOR
+		/*if( (LDR_Range(ADC_readChannel(0))) == LOW)// LDR SENSOR
 		{
 			LED_VoidOffLed(LED_ONEA2);
 			LED_VoidOffLed(LED_TWOA3);
@@ -82,21 +86,21 @@ void project(void)
 		{
 			LED_VoidOnLed(LED_ONEA2);
 			LED_VoidOnLed(LED_TWOA3);
-		}
+		}*/
 
 
 
-		temp = ADC_readChannel(1) ;
-		if(temp > 30*2 )
+
+		if(temp > 30 )
 		{
 			DC_ON_OFF(ON);
 		}
-		if(temp > (30*2)+5 )
+		if(temp > (30)+5 )
 		{
 			DC_ON_OFF(ON);
 			BUZZER_ON_OFF(ON);
 		}
-		if (temp < 30*2)
+		if (temp < 30)
 		{
 			DC_ON_OFF(OFF);
 		}
