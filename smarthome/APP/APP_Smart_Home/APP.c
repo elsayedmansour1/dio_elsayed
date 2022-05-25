@@ -46,10 +46,6 @@ void project(void)
 	Servo_Init();
 
 
-	Seven_Segment_Pin_00(ON);
-
-
-
 	uint8 ADC_DataReturnA0 ; // Channel of ldr sensor
 	uint8 ADC_DataReturnA1 ; // Channel of Temprither sensor
 
@@ -59,9 +55,7 @@ void project(void)
 	while(1)
 	{
 
-
 		BUZZER_ON_OFF(ON);
-
 		/**
 		 * @braif keybad
 		 */
@@ -74,34 +68,19 @@ void project(void)
 		CLCD_voidWriteNumber(ADC_readChannel(1)/2);
 
 
-
-		Seven_Segment_Pin_0(OFF);
-
-
-
-		/*
-					if(PASS==)
-					{
-
-					}
-					else
-					{
-
-					}
-		 */
-
 		if( (LDR_Range(ADC_readChannel(0))) == LOW)// LDR SENSOR
 		{
 			LED_VoidOffLed(LED_ONEA2);
 			LED_VoidOffLed(LED_TWOA3);
 		}
-		else if(  (LDR_Range(ADC_readChannel(0))) == HIGH)
+		else if((LDR_Range(ADC_readChannel(0))) == HIGH)
 		{
 			LED_VoidOnLed(LED_ONEA2);
 			LED_VoidOffLed(LED_TWOA3);
 		}
 		else if((LDR_Range(ADC_readChannel(0))) == HIGHHIGH)
 		{
+			LED_VoidOnLed(LED_ONEA2);
 			LED_VoidOnLed(LED_TWOA3);
 		}
 
@@ -141,6 +120,10 @@ void __vector_1(void)
 int keybad_System(void)
 {
 	LCD_Init();
+	LED_VoidInit();
+	DC_Init();
+	Servo_Init();
+
 	while(1)
 	{
 		uint8 Flag1=0 ;
@@ -243,8 +226,7 @@ int keybad_System(void)
 				DIGIT *= 10 ;
 			}
 
-			Lcd_Clear();
-			break ;
+			break;
 
 		}
 		else if(PASS>=0 && PASS<=9 && PASS!=43 && PASS!=42 && PASS!=45 && PASS!=46 && PASS!=67 && PASS!=61 ) // Check is ok or nok
@@ -274,6 +256,14 @@ int keybad_System(void)
 				_delay_ms(500);
 				Sevro_Degre(0);
 				Counter=0;
+
+				Lcd_Clear();
+				LCD_Commands(0X80);
+				LCD_Write_String("Right pass ......");
+				_delay_ms(500);
+				LCD_Commands(0XC0);
+				LCD_Write_String("Right pass ......");
+				Lcd_Clear();
 			}
 			else if(Sum!=9999)
 			{
@@ -311,13 +301,10 @@ int keybad_System(void)
 
 					LCD_Commands(0X80);
 					LCD_Write_String("Enter your PASS");
-
+					break;
 
 				}
-				Lcd_Clear();
-				break;
 			}
-
 		}
 	}
 
