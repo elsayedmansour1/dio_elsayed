@@ -13,7 +13,7 @@
 
 uint8 TempSensor_Range(uint16 ADC_Value)
 {
-	uint16 Temperature       = (uint16)(((uint32)ADC_Value*256UL)/1023);;
+	uint16 Temperature       = (uint16)(((uint32)ADC_Value*256UL)/1024);;
 
 	   if(ADC_Value< (Temperature/2) )
 		{

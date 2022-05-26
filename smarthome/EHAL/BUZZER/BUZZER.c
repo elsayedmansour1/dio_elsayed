@@ -8,7 +8,7 @@
 
 void BUZZER_Init(void)
 {
-	DDRD_REG |= (1<<PIN_7);	 /* Make OC1A pin as output */
+	DIO_VoidSetPinDir(PORTD,PIN_7,OUTPUT);
 }
 void BUZZER_ON_OFF(uint8 State)
 {

@@ -10,13 +10,13 @@ RM := rm -rf
 -include sources.mk
 -include RUN_MAIN/subdir.mk
 -include MCAL/WATCH_DOG/subdir.mk
--include MCAL/TIMER1/subdir.mk
+-include MCAL/TIMER1/Source/subdir.mk
 -include MCAL/I2C/src/subdir.mk
 -include MCAL/GIE/Source/subdir.mk
 -include MCAL/EXT_INTERRUPTS/src/subdir.mk
 -include MCAL/EEPROM/Source/subdir.mk
 -include MCAL/DIO/Source/subdir.mk
--include MCAL/ADC/subdir.mk
+-include MCAL/ADC_G/subdir.mk
 -include EHAL/TEMP_SENSOR/src/subdir.mk
 -include EHAL/SEVEN-SEGMINT/Source/subdir.mk
 -include EHAL/SERVO/subdir.mk
@@ -50,47 +50,47 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LSS += \
-SMART_HOME_TEST2_2022.lss \
+IMT_Smart_Home.lss \
 
 FLASH_IMAGE += \
-SMART_HOME_TEST2_2022.hex \
+IMT_Smart_Home.hex \
 
 SIZEDUMMY += \
 sizedummy \
 
 
 # All Target
-all: SMART_HOME_TEST2_2022.elf secondary-outputs
+all: IMT_Smart_Home.elf secondary-outputs
 
 # Tool invocations
-SMART_HOME_TEST2_2022.elf: $(OBJS) $(USER_OBJS)
+IMT_Smart_Home.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,SMART_HOME_TEST2_2022.map -mmcu=atmega32 -o "SMART_HOME_TEST2_2022.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,IMT_Smart_Home.map -mmcu=atmega32 -o "IMT_Smart_Home.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-SMART_HOME_TEST2_2022.lss: SMART_HOME_TEST2_2022.elf
+IMT_Smart_Home.lss: IMT_Smart_Home.elf
 	@echo 'Invoking: AVR Create Extended Listing'
-	-avr-objdump -h -S SMART_HOME_TEST2_2022.elf  >"SMART_HOME_TEST2_2022.lss"
+	-avr-objdump -h -S IMT_Smart_Home.elf  >"IMT_Smart_Home.lss"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-SMART_HOME_TEST2_2022.hex: SMART_HOME_TEST2_2022.elf
+IMT_Smart_Home.hex: IMT_Smart_Home.elf
 	@echo 'Create Flash image (ihex format)'
-	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex SMART_HOME_TEST2_2022.elf  "SMART_HOME_TEST2_2022.hex"
+	-avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex IMT_Smart_Home.elf  "IMT_Smart_Home.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-sizedummy: SMART_HOME_TEST2_2022.elf
+sizedummy: IMT_Smart_Home.elf
 	@echo 'Invoking: Print Size'
-	-avr-size --format=avr --mcu=atmega32 SMART_HOME_TEST2_2022.elf
+	-avr-size --format=avr --mcu=atmega32 IMT_Smart_Home.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) SMART_HOME_TEST2_2022.elf
+	-$(RM) $(FLASH_IMAGE)$(ELFS)$(OBJS)$(ASM_DEPS)$(S_DEPS)$(SIZEDUMMY)$(S_UPPER_DEPS)$(LSS)$(C_DEPS) IMT_Smart_Home.elf
 	-@echo ' '
 
 secondary-outputs: $(LSS) $(FLASH_IMAGE) $(SIZEDUMMY)
